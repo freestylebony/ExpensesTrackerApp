@@ -10,7 +10,9 @@ using ExpensesTracker.Models;
 
 namespace ExpensesTrackerApp.Controllers
 {
-    public class ExpensesController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class ExpensesController : ControllerBase
     {
         private readonly ExpenseDBContext _context;
 
@@ -20,130 +22,88 @@ namespace ExpensesTrackerApp.Controllers
         }
 
         // GET: Expenses
-        public async Task<IActionResult> Index()
+        
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Expense>>> GetExpense()
         {
-            return View(await _context.ExpensesDataBase.ToListAsync());
+            return await _context.ExpensesDataBase.ToListAsync();
         }
 
         // GET: Expenses/Details/5
-        public async Task<IActionResult> Details(int? id)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Expense>> GetExpense(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var expense = await _context.ExpensesDataBase
-                .FirstOrDefaultAsync(m => m.ItemId == id);
-            if (expense == null)
-            {
-                return NotFound();
-            }
-
-            return View(expense);
-        }
-
-        // GET: Expenses/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Expenses/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ItemId,ItemName,Amount,ExpenseDate,Category")] Expense expense)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(expense);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(expense);
-        }
-
-        // GET: Expenses/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             var expense = await _context.ExpensesDataBase.FindAsync(id);
+
             if (expense == null)
             {
                 return NotFound();
             }
-            return View(expense);
+            return expense;
         }
 
-        // POST: Expenses/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ItemId,ItemName,Amount,ExpenseDate,Category")] Expense expense)
+
+        // PUT: api/Expenses/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutExpense(int id, Expense expense)
         {
             if (id != expense.ItemId)
             {
-                return NotFound();
+                return BadRequest();
             }
 
-            if (ModelState.IsValid)
+            _context.Entry(expense).State = EntityState.Modified;
+
+            try
             {
-                try
-                {
-                    _context.Update(expense);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ExpenseExists(expense.ItemId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                await _context.SaveChangesAsync();
             }
-            return View(expense);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ExpenseExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
         }
 
-        // GET: Expenses/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+
+
+        // POST: api/Expenses
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost]
+        public async Task<ActionResult<Expense>> PostExpense(Expense expense)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var expense = await _context.ExpensesDataBase
-                .FirstOrDefaultAsync(m => m.ItemId == id);
-            if (expense == null)
-            {
-                return NotFound();
-            }
-
-            return View(expense);
-        }
-
-        // POST: Expenses/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var expense = await _context.ExpensesDataBase.FindAsync(id);
-            _context.ExpensesDataBase.Remove(expense);
+            _context.ExpensesDataBase.Add(expense);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            return CreatedAtAction("GetExpense", new { id = expense.ItemId }, expense);
         }
+
+        // DELETE: api/Categories/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteCategory(int id)
+        {
+            var category = await _context.ExpensesDataBase.FindAsync(id);
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            _context.ExpensesDataBase.Remove(category);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+       
 
         private bool ExpenseExists(int id)
         {
