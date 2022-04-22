@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32210.238
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpensesTrackerApp", "ExpensesTrackerApp\ExpensesTrackerApp.csproj", "{4143FB9B-3EB6-4BDF-8424-D5A84DC3C762}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExpensesTrackerApp", "ExpensesTrackerApp\ExpensesTrackerApp.csproj", "{4143FB9B-3EB6-4BDF-8424-D5A84DC3C762}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTests", "IntegrationTests\IntegrationTests.csproj", "{B2A9801A-94EC-446B-81AA-D0F967A5263C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntegrationTests", "IntegrationTests\IntegrationTests.csproj", "{B2A9801A-94EC-446B-81AA-D0F967A5263C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpensesTrackerAPI", "ExpensesTrackerAPI\ExpensesTrackerAPI.csproj", "{F14D40BE-22F4-46D0-BE96-50A26BA2DBE0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExpensesTrackerAPI", "ExpensesTrackerAPI\ExpensesTrackerAPI.csproj", "{F14D40BE-22F4-46D0-BE96-50A26BA2DBE0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
