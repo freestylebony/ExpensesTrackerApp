@@ -128,7 +128,7 @@ namespace IntegrationTests
             input.SendKeys("Other");
             input.Submit();
         }
-
+        // edit second expense on the row
         [TestMethod]
         public void HomePage_Navigate_Edit_Second_Expense()
         {
